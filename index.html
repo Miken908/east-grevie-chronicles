@@ -17,11 +17,12 @@
     <!-- Main Application Container -->
     <div id="game-container" class="console-container">
         
-        <!-- Header Navigation Bar -->
+        <!-- Header Navigation Bar HUD -->
         <header id="game-header" class="header-bar">
-            <div class="brand-title">
-                <span class="brand-name">EAST GREVIE CHRONICLES</span>
-                <span class="brand-subtitle">THE SHADOW'S TALE</span>
+            <div class="hud-status-group">
+                <div id="act-badge" class="status-badge">ACT I: THE WITHERING REALM</div>
+                <div id="scene-location" class="status-badge location">Citadel Academy Library</div>
+                <div id="corruption-badge" class="status-badge danger">SHADOW CORRUPTION: 0%</div>
             </div>
             
             <div class="header-actions">
@@ -37,12 +38,6 @@
             <div id="scene-bg-frame" class="scene-bg-frame">
                 <img id="scene-bg-img" src="assets/images/citadel_library.jpg" alt="Scene Background">
                 <div class="scene-overlay"></div>
-                
-                <!-- Status Badges Overlay -->
-                <div class="status-badges-container">
-                    <div id="act-badge" class="status-badge">ACT I: THE WITHERING REALM</div>
-                    <div id="corruption-badge" class="status-badge danger">SHADOW CORRUPTION: 0%</div>
-                </div>
 
                 <!-- Dual Character Portrait Stage -->
                 <div class="portrait-stage">
@@ -65,7 +60,6 @@
                 <!-- Speaker Nameplate -->
                 <div class="speaker-nameplate-bar">
                     <span id="speaker-name" class="speaker-name">Archmage Alistair</span>
-                    <span id="scene-location" class="scene-location">Citadel Academy Library</span>
                 </div>
 
                 <!-- Dialogue Text Display Box -->

@@ -62,35 +62,20 @@ body {
     position: relative;
 }
 
-/* Header Navigation Bar */
+/* Header Navigation Bar HUD */
 .header-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 24px;
+    padding: 10px 24px;
     background: #0f121d;
     border-bottom: 2px solid var(--gold-border);
 }
 
-.brand-title {
+.hud-status-group {
     display: flex;
-    flex-direction: column;
-}
-
-.brand-name {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--gold-bright);
-    letter-spacing: 1px;
-    text-shadow: 0 0 12px var(--gold-glow);
-}
-
-.brand-subtitle {
-    font-size: 0.78rem;
-    color: var(--purple-shadow);
-    letter-spacing: 2px;
-    font-weight: bold;
+    align-items: center;
+    gap: 12px;
 }
 
 .header-actions {
@@ -163,16 +148,6 @@ body {
     pointer-events: none;
 }
 
-/* Status Badges Overlay */
-.status-badges-container {
-    position: absolute;
-    top: 16px;
-    left: 20px;
-    display: flex;
-    gap: 12px;
-    z-index: 10;
-}
-
 .status-badge {
     background: rgba(12, 14, 22, 0.92);
     border: 1px solid var(--gold-primary);
@@ -183,6 +158,11 @@ body {
     letter-spacing: 0.5px;
     padding: 6px 14px;
     border-radius: 4px;
+}
+
+.status-badge.location {
+    border-color: var(--cyan-accent);
+    color: var(--cyan-accent);
 }
 
 .status-badge.danger {
