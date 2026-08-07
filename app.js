@@ -255,39 +255,41 @@ const STORY_DATA = {
 };
 
 // ----------------------------------------------------
-// UI DOM ELEMENTS
+// UI DOM ELEMENTS (Safe for Browser & Node.js Testing)
 // ----------------------------------------------------
-const sceneBgImgEl = document.getElementById("scene-bg-img");
-const actBadgeEl = document.getElementById("act-badge");
-const corruptionBadgeEl = document.getElementById("corruption-badge");
-const speakerNameEl = document.getElementById("speaker-name");
-const sceneLocationEl = document.getElementById("scene-location");
-const dialogueTextEl = document.getElementById("dialogue-text");
-const typewriterCursorEl = document.getElementById("typewriter-cursor");
-const choicesContainerEl = document.getElementById("choices-container");
-const dialogueTextFrameEl = document.getElementById("dialogue-text-frame");
+const getEl = (id) => typeof document !== 'undefined' ? document.getElementById(id) : null;
 
-const portraitLeftSlotEl = document.getElementById("portrait-left-slot");
-const portraitLeftImgEl = document.getElementById("portrait-left-img");
-const portraitLeftLabelEl = document.getElementById("portrait-left-label");
+const sceneBgImgEl = getEl("scene-bg-img");
+const actBadgeEl = getEl("act-badge");
+const corruptionBadgeEl = getEl("corruption-badge");
+const speakerNameEl = getEl("speaker-name");
+const sceneLocationEl = getEl("scene-location");
+const dialogueTextEl = getEl("dialogue-text");
+const typewriterCursorEl = getEl("typewriter-cursor");
+const choicesContainerEl = getEl("choices-container");
+const dialogueTextFrameEl = getEl("dialogue-text-frame");
 
-const portraitRightSlotEl = document.getElementById("portrait-right-slot");
-const portraitRightImgEl = document.getElementById("portrait-right-img");
-const portraitRightLabelEl = document.getElementById("portrait-right-label");
+const portraitLeftSlotEl = getEl("portrait-left-slot");
+const portraitLeftImgEl = getEl("portrait-left-img");
+const portraitLeftLabelEl = getEl("portrait-left-label");
 
-const historyModalEl = document.getElementById("history-modal");
-const historyLogContentEl = document.getElementById("history-log-content");
-const historyBtnEl = document.getElementById("history-btn");
-const closeHistoryModalBtn = document.getElementById("close-history-modal-btn");
+const portraitRightSlotEl = getEl("portrait-right-slot");
+const portraitRightImgEl = getEl("portrait-right-img");
+const portraitRightLabelEl = getEl("portrait-right-label");
 
-const audioSettingsModalEl = document.getElementById("audio-settings-modal");
-const audioSettingsBtnEl = document.getElementById("audio-settings-btn");
-const closeAudioModalBtn = document.getElementById("close-audio-modal-btn");
+const historyModalEl = getEl("history-modal");
+const historyLogContentEl = getEl("history-log-content");
+const historyBtnEl = getEl("history-btn");
+const closeHistoryModalBtn = getEl("close-history-modal-btn");
 
-const confirmModalEl = document.getElementById("confirm-modal");
-const restartBtnEl = document.getElementById("restart-btn");
-const confirmCancelBtnEl = document.getElementById("confirm-cancel-btn");
-const confirmOkBtnEl = document.getElementById("confirm-ok-btn");
+const audioSettingsModalEl = getEl("audio-settings-modal");
+const audioSettingsBtnEl = getEl("audio-settings-btn");
+const closeAudioModalBtn = getEl("close-audio-modal-btn");
+
+const confirmModalEl = getEl("confirm-modal");
+const restartBtnEl = getEl("restart-btn");
+const confirmCancelBtnEl = getEl("confirm-cancel-btn");
+const confirmOkBtnEl = getEl("confirm-ok-btn");
 
 // ----------------------------------------------------
 // NARRATIVE ENGINE FUNCTIONS
@@ -487,9 +489,11 @@ if (confirmOkBtnEl && confirmModalEl) {
 }
 
 // Initialize Story on Load
-window.addEventListener("DOMContentLoaded", () => {
-    loadScene("act1_intro");
-});
+if (typeof window !== 'undefined') {
+    window.addEventListener("DOMContentLoaded", () => {
+        loadScene("act1_intro");
+    });
+}
 
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
