@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>East Grevie Chronicles: The Shadow's Tale</title>
+    <meta name="description" content="An interactive dark fantasy visual novel exploring the tragic origin of Lord Rodrigues in the East Grevie Universe.">
+    
+    <!-- Google Fonts for Retro & Fantasy Aesthetics -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="crt-bezel">
+    <!-- Main Application Container -->
+    <div id="game-container" class="console-container">
+        
+        <!-- Header Navigation Bar -->
+        <header id="game-header" class="header-bar">
+            <div class="brand-title">
+                <span class="brand-name">EAST GREVIE CHRONICLES</span>
+                <span class="brand-subtitle">THE SHADOW'S TALE</span>
+            </div>
+            
+            <div class="header-actions">
+                <button id="history-btn" class="header-btn" title="View Dialogue Log">LOG</button>
+                <button id="audio-settings-btn" class="header-btn" title="Audio & Voice Settings">AUDIO</button>
+                <button id="restart-btn" class="header-btn warning" title="Restart Story">RESTART</button>
+            </div>
+        </header>
+
+        <!-- Main Narrative Viewport -->
+        <main id="main-viewport" class="narrative-viewport">
+            
+            <!-- Background Artwork Frame -->
+            <div id="scene-bg-frame" class="scene-bg-frame">
+                <img id="scene-bg-img" src="assets/images/citadel_library.jpg" alt="Scene Background">
+                <div class="scene-overlay"></div>
+                
+                <!-- Status Badges Overlay -->
+                <div class="status-badges-container">
+                    <div id="act-badge" class="status-badge">ACT I: THE WITHERING REALM</div>
+                    <div id="corruption-badge" class="status-badge danger">SHADOW CORRUPTION: 0%</div>
+                </div>
+
+                <!-- Dual Character Portrait Stage -->
+                <div class="portrait-stage">
+                    <!-- Left Character Slot (Protagonist: Rodrigues) -->
+                    <div id="portrait-left-slot" class="portrait-slot left hidden">
+                        <img id="portrait-left-img" src="" alt="Left Character">
+                        <div id="portrait-left-label" class="portrait-label">Rodrigues</div>
+                    </div>
+
+                    <!-- Right Character Slot (NPC / Companion) -->
+                    <div id="portrait-right-slot" class="portrait-slot right hidden">
+                        <img id="portrait-right-img" src="" alt="Right Character">
+                        <div id="portrait-right-label" class="portrait-label">Companion</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dialogue & Choice Box Container -->
+            <div id="dialogue-box-container" class="dialogue-box-container">
+                <!-- Speaker Nameplate -->
+                <div class="speaker-nameplate-bar">
+                    <span id="speaker-name" class="speaker-name">Archmage Alistair</span>
+                    <span id="scene-location" class="scene-location">Citadel Academy Library</span>
+                </div>
+
+                <!-- Dialogue Text Display Box -->
+                <div id="dialogue-text-frame" class="dialogue-text-frame" title="Click to advance text">
+                    <p id="dialogue-text" class="dialogue-text">Initializing story...</p>
+                    <div id="typewriter-cursor" class="typewriter-cursor">▼</div>
+                </div>
+
+                <!-- Branching Choice Options Container -->
+                <div id="choices-container" class="choices-container hidden">
+                    <!-- Dynamic choice buttons rendered by JS -->
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer Bar -->
+        <footer class="footer-bar">
+            <span>East Grevie Chronicles &copy; 2026</span>
+            <span>Interactive Narrative Engine v1.0</span>
+        </footer>
+
+    </div>
+
+    <!-- Dialogue Log / History Modal -->
+    <div id="history-modal" class="modal-overlay hidden">
+        <div class="modal-content crt-box history-box">
+            <div class="modal-header">
+                <h2>DIALOGUE HISTORY LOG</h2>
+                <button id="close-history-modal-btn" class="arcade-btn-sm warning">✖ CLOSE</button>
+            </div>
+            <div id="history-log-content" class="history-log-content">
+                <!-- Log entries appended dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Settings Modal -->
+    <div id="audio-settings-modal" class="modal-overlay hidden">
+        <div class="modal-content crt-box audio-settings-box">
+            <div class="modal-header">
+                <h2>AUDIO & VOICE SETTINGS</h2>
+                <button id="close-audio-modal-btn" class="arcade-btn-sm warning">✖ CLOSE</button>
+            </div>
+            <div class="audio-controls-grid">
+                <div class="control-group">
+                    <label for="voice-select">NARRATOR VOICE:</label>
+                    <div class="voice-select-row">
+                        <select id="voice-select" class="voice-dropdown"></select>
+                        <button id="test-voice-btn" class="arcade-btn-sm">PREVIEW</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="master-vol">MASTER VOLUME:</label>
+                    <input type="range" id="master-vol" min="0" max="100" value="80">
+                </div>
+                <div class="control-group">
+                    <label for="music-vol">MUSIC VOLUME:</label>
+                    <input type="range" id="music-vol" min="0" max="100" value="50">
+                </div>
+                <div class="control-group">
+                    <label for="sfx-vol">SFX VOLUME:</label>
+                    <input type="range" id="sfx-vol" min="0" max="100" value="70">
+                </div>
+                <div class="control-group">
+                    <label for="voice-vol">VOICE VOLUME:</label>
+                    <input type="range" id="voice-vol" min="0" max="100" value="90">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Retro Confirmation Modal -->
+    <div id="confirm-modal" class="modal-overlay hidden">
+        <div class="modal-content crt-box confirm-box">
+            <div class="confirm-header">
+                <h2 id="confirm-modal-title" class="confirm-title">RESTART STORY?</h2>
+            </div>
+            <p id="confirm-modal-text" class="confirm-text">Are you sure you want to restart the story? All current choices and progress will be reset.</p>
+            <div class="confirm-btn-group">
+                <button id="confirm-cancel-btn" class="arcade-btn-sm warning">CANCEL</button>
+                <button id="confirm-ok-btn" class="arcade-btn-sm danger">CONFIRM RESTART</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
