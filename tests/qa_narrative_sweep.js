@@ -37,8 +37,8 @@ check("Audio settings modal present (#audio-settings-modal)", htmlContent.includ
 // 2. CSS Design System Verification
 console.log("\n--- TEST GROUP 2: CSS Visual Styling & Widescreen Layout ---");
 check("Console container max-width defined as 1240px", cssContent.includes('max-width: 1240px'));
-check("Cyan glow theme variable defined", cssContent.includes('--border-cyan: #00f0ff'));
-check("Cinzel fantasy font imported", cssContent.includes('Cinzel'));
+check("Gold border theme variable defined", cssContent.includes('--gold-border: #283a45'));
+check("Outfit display font imported", cssContent.includes("font-display: 'Outfit'"));
 check("Character portrait slots flex layout", cssContent.includes('.portrait-stage'));
 
 // 3. Narrative Data Tree & Branching Choices Verification
