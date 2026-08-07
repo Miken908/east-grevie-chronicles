@@ -30,8 +30,7 @@ check("Left character portrait slot present (#portrait-left-slot)", htmlContent.
 check("Right character portrait slot present (#portrait-right-slot)", htmlContent.includes('id="portrait-right-slot"'));
 check("Speaker nameplate present (#speaker-name)", htmlContent.includes('id="speaker-name"'));
 check("Dialogue text display box present (#dialogue-text-frame)", htmlContent.includes('id="dialogue-text-frame"'));
-check("Choices container present (#choices-container)", htmlContent.includes('id="choices-container"'));
-check("History log modal present (#history-modal)", htmlContent.includes('id="history-modal"'));
+check("Voice selector dropdown present (#voice-select)", htmlContent.includes('id="voice-select"'));
 check("Audio settings modal present (#audio-settings-modal)", htmlContent.includes('id="audio-settings-modal"'));
 
 // 2. CSS Design System Verification

@@ -330,6 +330,11 @@ function loadScene(sceneId) {
         text: scene.text
     });
 
+    // Trigger Speech Synthesis Voice Narration
+    if (typeof voiceNarrator !== 'undefined' && voiceNarrator.speak) {
+        voiceNarrator.speak(scene.text);
+    }
+
     // Start Typewriter Text Effect
     typewriteText(scene.text, () => {
         // Show Choice buttons or next scene prompt
@@ -426,34 +431,134 @@ if (dialogueTextFrameEl) {
     });
 }
 
-// Dialogue History Modal Handlers
-if (historyBtnEl && historyModalEl) {
-    historyBtnEl.addEventListener("click", () => {
-        renderHistoryLog();
-        historyModalEl.classList.remove("hidden");
-    });
+// --- Neural Speech Synthesis Engine ---
+class VoiceNarrator {
+    constructor() {
+        this.synth = (typeof window !== 'undefined' && window.speechSynthesis) ? window.speechSynthesis : null;
+        this.enabled = true;
+        this.selectedVoice = null;
+        this.speaking = false;
+        this.initVoices();
+    }
+
+    initVoices(onReady) {
+        if (!this.synth) return;
+        const loadVoices = () => {
+            const voices = this.synth.getVoices();
+            if (!voices || voices.length === 0) return;
+
+            this.selectedVoice = voices.find(v => v.lang.startsWith('en') && (
+                v.name.includes('Natural') || v.name.includes('Neural') || v.name.includes('Online') || v.name.includes('HD')
+            ) && (v.name.includes('Guy') || v.name.includes('Christopher') || v.name.includes('Male') || v.name.includes('Sonia') || v.name.includes('Jenny') || v.name.includes('UK')))
+            || voices.find(v => v.lang.startsWith('en') && (
+                v.name.includes('Natural') || v.name.includes('Neural') || v.name.includes('Google UK English') || v.name.includes('Oliver') || v.name.includes('Serena') || v.name.includes('Daniel')
+            ))
+            || voices.find(v => v.lang.startsWith('en'))
+            || voices[0];
+
+            if (onReady) onReady();
+            populateVoiceDropdown();
+        };
+
+        loadVoices();
+        if (this.synth.onvoiceschanged !== undefined) {
+            this.synth.onvoiceschanged = loadVoices;
+        }
+    }
+
+    getAvailableVoices() {
+        if (!this.synth) return [];
+        const voices = this.synth.getVoices() || [];
+        const englishVoices = voices.filter(v => v.lang.startsWith('en'));
+        englishVoices.sort((a, b) => {
+            const aNeural = a.name.includes('Natural') || a.name.includes('Neural') || a.name.includes('Online') || a.name.includes('HD');
+            const bNeural = b.name.includes('Natural') || b.name.includes('Neural') || b.name.includes('Online') || b.name.includes('HD');
+            if (aNeural && !bNeural) return -1;
+            if (!aNeural && bNeural) return 1;
+            return a.name.localeCompare(b.name);
+        });
+        return englishVoices.length > 0 ? englishVoices : voices;
+    }
+
+    setVoiceByName(name) {
+        if (!this.synth) return;
+        const voices = this.synth.getVoices();
+        const found = voices.find(v => v.name === name || v.voiceURI === name);
+        if (found) {
+            this.selectedVoice = found;
+        }
+    }
+
+    speak(text) {
+        if (!this.enabled || !this.synth) return;
+        this.stop();
+        this.speaking = true;
+
+        const cleanText = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        utterance.volume = state.audio.voiceVol * state.audio.masterVol;
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        utterance.onend = () => { this.speaking = false; };
+        utterance.onerror = () => { this.speaking = false; };
+        this.synth.speak(utterance);
+    }
+
+    stop() {
+        if (this.synth) {
+            this.synth.cancel();
+            this.speaking = false;
+        }
+    }
 }
 
-if (closeHistoryModalBtn && historyModalEl) {
-    closeHistoryModalBtn.addEventListener("click", () => {
-        historyModalEl.classList.add("hidden");
-    });
-}
+const voiceNarrator = new VoiceNarrator();
 
-function renderHistoryLog() {
-    if (!historyLogContentEl) return;
-    historyLogContentEl.innerHTML = "";
-    state.dialogueHistory.forEach(entry => {
-        const div = document.createElement("div");
-        div.className = "history-entry";
-        div.innerHTML = `<div class="history-speaker">${entry.speaker}</div><div class="history-text">${entry.text}</div>`;
-        historyLogContentEl.appendChild(div);
+function populateVoiceDropdown() {
+    const voiceSelectEl = getEl("voice-select");
+    if (!voiceSelectEl) return;
+    const voices = voiceNarrator.getAvailableVoices();
+    voiceSelectEl.innerHTML = "";
+
+    if (voices.length === 0) {
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "Standard System Voice";
+        voiceSelectEl.appendChild(opt);
+        return;
+    }
+
+    voices.forEach(voice => {
+        const opt = document.createElement("option");
+        opt.value = voice.name;
+        opt.textContent = `${voice.name} (${voice.lang})`;
+        if (voiceNarrator.selectedVoice && voiceNarrator.selectedVoice.name === voice.name) {
+            opt.selected = true;
+        }
+        voiceSelectEl.appendChild(opt);
     });
 }
 
 // Audio Settings Modal Handlers
+const voiceSelectEl = getEl("voice-select");
+const testVoiceBtnEl = getEl("test-voice-btn");
+
+if (voiceSelectEl) {
+    voiceSelectEl.addEventListener("change", (e) => {
+        voiceNarrator.setVoiceByName(e.target.value);
+    });
+}
+
+if (testVoiceBtnEl) {
+    testVoiceBtnEl.addEventListener("click", () => {
+        voiceNarrator.speak("Sunlight breaks as Young Rodrigues explores the Golden Citadel Academy.");
+    });
+}
+
 if (audioSettingsBtnEl && audioSettingsModalEl) {
     audioSettingsBtnEl.addEventListener("click", () => {
+        populateVoiceDropdown();
         audioSettingsModalEl.classList.remove("hidden");
     });
 }
