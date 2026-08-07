@@ -331,16 +331,7 @@ body {
     transform: translateX(6px);
 }
 
-/* Footer Bar */
-.footer-bar {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 24px;
-    background: #090c16;
-    border-top: 1px solid var(--gold-border);
-    font-size: 0.8rem;
-    color: var(--text-muted);
-}
+
 
 /* Modals Overlay */
 .modal-overlay {
